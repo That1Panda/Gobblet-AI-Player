@@ -74,6 +74,24 @@ def check_draw():
     """
     return all(board[row][col] != ' ' for row in range(GRID_SIZE) for col in range(GRID_SIZE))
 
+def move_result(current_player):
+    """
+    Checks if the current player has won the game or the game is a draw.
+
+    Args:
+        current_player (str): a string representing the current player which is either 'X' or 'O'
+
+    Returns:
+        bool: False if the current player has won the game or the game is a draw, True otherwise
+    """
+    if check_win(current_player):
+        print(f"Player {current_player} wins!")
+        return False
+    elif check_draw():
+        print("It's a draw!")
+        return False
+    return True
+
 # Function to handle the main game loop
 def play_game(player1_type, player2_type, computer_delay=5):
     """
@@ -98,15 +116,9 @@ def play_game(player1_type, player2_type, computer_delay=5):
 
                 if board[clicked_row][clicked_col] == ' ':
                     board[clicked_row][clicked_col] = current_player
-
-                    if check_win(current_player):
-                        print(f"Player {current_player} wins!")
-                        running = False
-                    elif check_draw():
-                        print("It's a draw!")
-                        running = False
-                    else:
-                        current_player = 'O'
+                    
+                    running = move_result(current_player)
+                    current_player = 'O'
 
             if event.type == pygame.MOUSEBUTTONDOWN and current_player == 'O' and player2_type == 'human':
                 mouseX, mouseY = pygame.mouse.get_pos()
@@ -115,14 +127,8 @@ def play_game(player1_type, player2_type, computer_delay=5):
                 if board[clicked_row][clicked_col] == ' ':
                     board[clicked_row][clicked_col] = current_player
 
-                    if check_win(current_player):
-                        print(f"Player {current_player} wins!")
-                        running = False
-                    elif check_draw():
-                        print("It's a draw!")
-                        running = False
-                    else:
-                        current_player = 'X'
+                    running = move_result(current_player)
+                    current_player = 'X'
 
         if current_player == 'X' and player1_type == 'computer':
             computer_move_result = computer_move()
@@ -131,14 +137,8 @@ def play_game(player1_type, player2_type, computer_delay=5):
                 row, col = computer_move_result
                 board[row][col] = current_player
 
-                if check_win(current_player):
-                    print(f"Player {current_player} wins!")
-                    running = False
-                elif check_draw():
-                    print("It's a draw!")
-                    running = False
-                else:
-                    current_player = 'O'
+                running = move_result(current_player)
+                current_player = 'O'
 
         elif current_player == 'O' and player2_type == 'computer':
             computer_move_result = computer_move()
@@ -147,14 +147,8 @@ def play_game(player1_type, player2_type, computer_delay=5):
                 row, col = computer_move_result
                 board[row][col] = current_player
 
-                if check_win(current_player):
-                    print(f"Player {current_player} wins!")
-                    running = False
-                elif check_draw():
-                    print("It's a draw!")
-                    running = False
-                else:
-                    current_player = 'X'
+                running = move_result(current_player)
+                current_player = 'X'
 
         # Draw the board
         screen.fill(WHITE)
