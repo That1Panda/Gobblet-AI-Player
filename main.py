@@ -1,6 +1,7 @@
 import sys
 import random
 import pygame
+import time
 
 # Constants
 WIDTH, HEIGHT = 400, 400
@@ -65,13 +66,14 @@ def computer_move():
     return None
 
 # Function to handle the main game loop
-def play_game(player1_type, player2_type):
+def play_game(player1_type, player2_type, computer_delay=5):
     """
     Handles the main game loop.
 
     Args:
         player1_type (str): A string representing the type of player 1 which is either 'human' or 'computer'
         player2_type (str): A string representing the type of player 2 which is either 'human' or 'computer'
+        computer_delay (int): The delay in seconds for the computer to make a move
     """
     current_player = 'X'
     running = True
@@ -110,6 +112,7 @@ def play_game(player1_type, player2_type):
         if current_player == 'X' and player1_type == 'computer':
             computer_move_result = computer_move()
             if computer_move_result:
+                time.sleep(computer_delay)
                 row, col = computer_move_result
                 board[row][col] = current_player
 
@@ -122,6 +125,7 @@ def play_game(player1_type, player2_type):
         elif current_player == 'O' and player2_type == 'computer':
             computer_move_result = computer_move()
             if computer_move_result:
+                time.sleep(computer_delay)
                 row, col = computer_move_result
                 board[row][col] = current_player
 
