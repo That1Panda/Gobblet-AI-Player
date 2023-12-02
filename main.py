@@ -52,8 +52,56 @@ def check_win(player):
 
     return False
 
+# Function to evaluate the score of the board
+def evaluate_board():
+    """
+    Evaluates the score of the board.
+
+    Returns:
+        bool: +1 if 'X' wins, -1 if 'O' wins, 0 if draw or ongoing game
+    """
+    if check_win('X'):
+        return 1
+    elif check_win('O'):
+        return -1
+    elif check_draw():
+        return 0
+
+    return None
+
+
+# Function to perform the Minimax algorithm
+def minimax(board, depth, is_maximizing):
+    score = evaluate_board()
+
+    if score is not None:
+        return score
+
+    if is_maximizing:
+        max_eval = float('-inf')
+        for row in range(GRID_SIZE):
+            for col in range(GRID_SIZE):
+                if board[row][col] == ' ':
+                    board[row][col] = 'X'
+                    eval_score = minimax(board, depth + 1, False)
+                    board[row][col] = ' '  # Undo the move
+
+                    max_eval = max(max_eval, eval_score)
+        return max_eval
+    else:
+        min_eval = float('inf')
+        for row in range(GRID_SIZE):
+            for col in range(GRID_SIZE):
+                if board[row][col] == ' ':
+                    board[row][col] = 'O'
+                    eval_score = minimax(board, depth + 1, True)
+                    board[row][col] = ' '  # Undo the move
+
+                    min_eval = min(min_eval, eval_score)
+        return min_eval
+
 # Function to make a move for the computer player
-def computer_move():
+def computer_move(algo='random'):
     """
     Chooses a random empty cell on the board.
 
@@ -61,8 +109,24 @@ def computer_move():
         tuple: a tuple representing the row and column of the chosen cell else None if the board is full
     """
     empty_cells = [(row, col) for row in range(GRID_SIZE) for col in range(GRID_SIZE) if board[row][col] == ' ']
-    if empty_cells:
+
+    if empty_cells and algo == 'random':
         return random.choice(empty_cells)
+    elif empty_cells and algo == 'minimax':
+        best_score = float('-inf')
+        best_move = None
+
+        for move in empty_cells:
+            row, col = move
+            board[row][col] = 'X'
+            score = minimax(board, 0, False)
+            board[row][col] = ' '  # Undo the move
+
+            if score > best_score:
+                best_score = score
+                best_move = move
+
+        return best_move
     return None
 
 def check_draw():
@@ -93,7 +157,7 @@ def move_result(current_player):
     return True
 
 # Function to handle the main game loop
-def play_game(player1_type, player2_type, computer_delay=5):
+def play_game(player1_type, player2_type, computer_delay=0):
     """
     Handles the main game loop.
 
