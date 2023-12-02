@@ -1,6 +1,6 @@
-import pygame
 import sys
 import random
+import pygame
 
 # Constants
 WIDTH, HEIGHT = 400, 400
@@ -13,6 +13,9 @@ BLACK = (0, 0, 0)
 
 # Function to draw the board
 def draw_board():
+    """
+    Draws the board on the screen.
+    """
     for row in range(GRID_SIZE):
         for col in range(GRID_SIZE):
             pygame.draw.rect(screen, WHITE, (col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE), 0)
@@ -26,6 +29,15 @@ def draw_board():
 
 # Function to check for a win
 def check_win(player):
+    """
+    Checks if the player has won the game.
+
+    Args:
+        player (str): a string representing the player which is either 'X' or 'O'
+
+    Returns:
+        bool: True if the player has won the game, False otherwise
+    """
     for row in range(GRID_SIZE):
         if all(board[row][col] == player for col in range(GRID_SIZE)):
             return True
@@ -41,6 +53,12 @@ def check_win(player):
 
 # Function to make a move for the computer player
 def computer_move():
+    """
+    Chooses a random empty cell on the board.
+
+    Returns:
+        tuple: a tuple representing the row and column of the chosen cell else None if the board is full
+    """
     empty_cells = [(row, col) for row in range(GRID_SIZE) for col in range(GRID_SIZE) if board[row][col] == ' ']
     if empty_cells:
         return random.choice(empty_cells)
@@ -48,6 +66,13 @@ def computer_move():
 
 # Function to handle the main game loop
 def play_game(player1_type, player2_type):
+    """
+    Handles the main game loop.
+
+    Args:
+        player1_type (str): A string representing the type of player 1 which is either 'human' or 'computer'
+        player2_type (str): A string representing the type of player 2 which is either 'human' or 'computer'
+    """
     current_player = 'X'
     running = True
 
@@ -119,6 +144,12 @@ def play_game(player1_type, player2_type):
 
 # Function to ask for the game mode
 def choose_game_mode():
+    """
+    Asks the user to choose the game mode out of the four available modes.
+
+    Returns:
+        str: number representing the chosen game mode
+    """
     print("Choose game mode:")
     print("1. Human vs. Human")
     print("2. Human vs. Computer")
