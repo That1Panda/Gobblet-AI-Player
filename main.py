@@ -76,13 +76,13 @@ def minimax(board, depth, is_maximizing, current_player):
     Performs the Minimax algorithm and returns the score of the board.
 
     Args:
-        board list[list[str]]: a list of lists representing the game board
-        depth int: the depth of the current node in the game tree
-        is_maximizing bool: True if the current node is a maximizing node, False otherwise
+        board (list[list[str]]): a list of lists representing the game board
+        depth (int): the depth of the current node in the game tree
+        is_maximizing (bool): True if the current node is a maximizing node, False otherwise
         current_player (str): a string representing the current player which is either 'X' or 'O'
 
     Returns:
-        int: the score of the board
+        min_eval (int): the score of the board
     """
     score = evaluate_board()
 
@@ -111,6 +111,136 @@ def minimax(board, depth, is_maximizing, current_player):
 
                     min_eval = min(min_eval, eval_score)
         return min_eval
+    
+def alpha_beta_pruning(board, depth, alpha, beta, is_maximizing):
+    """
+    Performs the Alpha-Beta Pruning algorithm and returns the score of the board.
+
+    Args:
+        board (list[list[str]]): a list of lists representing the game board
+        depth (int): the depth of the current node in the game tree
+        alpha (float): the best value that the maximizing player can guarantee at the current level or above
+        beta (float): the best value that the minimizing player can guarantee at the current level or above
+        is_maximizing (bool): True if the current node is a maximizing node, False otherwise
+
+    Returns:
+        int: the score of the board
+    """
+    score = evaluate_board()
+
+    if score is not None:
+        return score
+
+    if is_maximizing:
+        max_eval = float('-inf')
+        for row in range(GRID_SIZE):
+            for col in range(GRID_SIZE):
+                if board[row][col] == ' ':
+                    board[row][col] = 'X'
+                    eval_score = alpha_beta_pruning(board, depth + 1, alpha, beta, False)
+                    board[row][col] = ' '  # Undo the move
+
+                    max_eval = max(max_eval, eval_score)
+                    alpha = max(alpha, eval_score)
+                    if beta <= alpha:
+                        break  # Beta cutoff
+        return max_eval
+    else:
+        min_eval = float('inf')
+        for row in range(GRID_SIZE):
+            for col in range(GRID_SIZE):
+                if board[row][col] == ' ':
+                    board[row][col] = 'O'
+                    eval_score = alpha_beta_pruning(board, depth + 1, alpha, beta, True)
+                    board[row][col] = ' '  # Undo the move
+
+                    min_eval = min(min_eval, eval_score)
+                    beta = min(beta, eval_score)
+                    if beta <= alpha:
+                        break  # Alpha cutoff
+        return min_eval
+
+def alpha_beta_pruning_iterative_deepening(board, max_depth):
+    """
+    Performs Alpha-Beta Pruning with Iterative Deepening.
+
+    Args:
+        board (list[list[str]]): a list of lists representing the game board
+        max_depth (int): the maximum depth to explore
+
+    Returns:
+        best_move (tuple): a tuple representing the row and column of the best move
+    """
+    best_move = None
+    alpha = float('-inf')
+    beta = float('inf')
+
+    for depth in range(1, max_depth + 1):
+        move, _ = alpha_beta_pruning_helper(board, depth, alpha, beta, True)
+        best_move = move
+
+    return best_move
+
+
+def alpha_beta_pruning_helper(board, depth, alpha, beta, is_maximizing):
+    """
+    Helper function for Alpha-Beta Pruning with Iterative Deepening.
+
+    Args:
+        board list[list[str]]: a list of lists representing the game board
+        depth int: the depth of the current node in the game tree
+        alpha float: the best value that the maximizing player can guarantee at the current level or above
+        beta float: the best value that the minimizing player can guarantee at the current level or above
+        is_maximizing bool: True if the current node is a maximizing node, False otherwise
+
+    Returns:
+        best_move (tuple): a tuple representing the row and column of the best move, and the score
+        max_eval/min_eval (int): the score of the board
+    """
+    score = evaluate_board()
+
+    if score is not None or depth == 0:
+        return None, score
+
+    best_move = None
+
+    if is_maximizing:
+        max_eval = float('-inf')
+        for row in range(GRID_SIZE):
+            for col in range(GRID_SIZE):
+                if board[row][col] == ' ':
+                    board[row][col] = 'X'
+                    _, eval_score = alpha_beta_pruning_helper(board, depth - 1, alpha, beta, False)
+                    board[row][col] = ' '  # Undo the move
+
+                    if eval_score > max_eval:
+                        max_eval = eval_score
+                        best_move = (row, col)
+
+                    alpha = max(alpha, eval_score)
+                    if beta <= alpha:
+                        break  # Beta cutoff
+
+        return best_move, max_eval
+    else:
+        min_eval = float('inf')
+        for row in range(GRID_SIZE):
+            for col in range(GRID_SIZE):
+                if board[row][col] == ' ':
+                    board[row][col] = 'O'
+                    _, eval_score = alpha_beta_pruning_helper(board, depth - 1, alpha, beta, True)
+                    board[row][col] = ' '  # Undo the move
+
+                    if eval_score < min_eval:
+                        min_eval = eval_score
+                        best_move = (row, col)
+
+                    beta = min(beta, eval_score)
+                    if beta <= alpha:
+                        break  # Alpha cutoff
+
+        return best_move, min_eval
+
 
 # Function to make a move for the computer player
 def computer_move(current_player='X',algo='random'):
