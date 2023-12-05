@@ -71,7 +71,19 @@ def evaluate_board():
 
 
 # Function to perform the Minimax algorithm
-def minimax(board, depth, is_maximizing):
+def minimax(board, depth, is_maximizing, current_player):
+    """
+    Performs the Minimax algorithm and returns the score of the board.
+
+    Args:
+        board list[list[str]]: a list of lists representing the game board
+        depth int: the depth of the current node in the game tree
+        is_maximizing bool: True if the current node is a maximizing node, False otherwise
+        current_player (str): a string representing the current player which is either 'X' or 'O'
+
+    Returns:
+        int: the score of the board
+    """
     score = evaluate_board()
 
     if score is not None:
@@ -82,8 +94,8 @@ def minimax(board, depth, is_maximizing):
         for row in range(GRID_SIZE):
             for col in range(GRID_SIZE):
                 if board[row][col] == ' ':
-                    board[row][col] = 'X'
-                    eval_score = minimax(board, depth + 1, False)
+                    board[row][col] = current_player
+                    eval_score = minimax(board, depth + 1, False, 'X' if current_player == 'O' else 'O')
                     board[row][col] = ' '  # Undo the move
 
                     max_eval = max(max_eval, eval_score)
@@ -93,25 +105,30 @@ def minimax(board, depth, is_maximizing):
         for row in range(GRID_SIZE):
             for col in range(GRID_SIZE):
                 if board[row][col] == ' ':
-                    board[row][col] = 'O'
-                    eval_score = minimax(board, depth + 1, True)
+                    board[row][col] = current_player
+                    eval_score = minimax(board, depth + 1, True, 'X' if current_player == 'O' else 'O')
                     board[row][col] = ' '  # Undo the move
 
                     min_eval = min(min_eval, eval_score)
         return min_eval
 
 # Function to make a move for the computer player
-def computer_move(algo='random'):
+def computer_move(current_player='X',algo='random'):
     """
-    Chooses a random empty cell on the board.
-
+    Chooses the next a move for the computer player.
+    
+    Args:
+        algo (str): a string representing the algorithm to be used which is either 'random' or 'minimax'
+        current_player (str): a string representing the current player which is either 'X' or 'O'
+        
     Returns:
-        tuple: a tuple representing the row and column of the chosen cell else None if the board is full
+        best_move (tuple): a tuple representing the row and column of the chosen cell else None if the board is full
     """
     empty_cells = [(row, col) for row in range(GRID_SIZE) for col in range(GRID_SIZE) if board[row][col] == ' ']
 
     if empty_cells and algo == 'random':
         return random.choice(empty_cells)
+    
     elif empty_cells and algo == 'minimax':
         best_score = float('-inf')
         best_move = None
@@ -119,7 +136,7 @@ def computer_move(algo='random'):
         for move in empty_cells:
             row, col = move
             board[row][col] = 'X'
-            score = minimax(board, 0, False)
+            score = minimax(board, 0, False, 'X' if current_player == 'O' else 'O')
             board[row][col] = ' '  # Undo the move
 
             if score > best_score:
@@ -138,7 +155,7 @@ def check_draw():
     """
     return all(board[row][col] != ' ' for row in range(GRID_SIZE) for col in range(GRID_SIZE))
 
-def move_result(current_player):
+def game_status(current_player):
     """
     Checks if the current player has won the game or the game is a draw.
 
@@ -155,6 +172,29 @@ def move_result(current_player):
         print("It's a draw!")
         return False
     return True
+
+
+def human_move(current_player):
+    """
+    Handles the human move. (NOT USED BECAUSE NOT WORKING)
+
+    Args:
+        current_player (str): a string representing the current player which is either 'X' or 'O'
+
+    Returns:
+        bool: False if the current player has won the game or the game is a draw, True otherwise
+    """
+    mouseX, mouseY = pygame.mouse.get_pos()
+    clicked_row, clicked_col = mouseY // SQUARE_SIZE, mouseX // SQUARE_SIZE
+
+    if board[clicked_row][clicked_col] == ' ':
+        board[clicked_row][clicked_col] = current_player
+
+        running = game_status(current_player)
+        if current_player == 'X':
+            return ('O', running)
+        
+        return  ('X', running)
 
 # Function to handle the main game loop
 def play_game(player1_type, player2_type, computer_delay=0):
@@ -180,8 +220,8 @@ def play_game(player1_type, player2_type, computer_delay=0):
 
                 if board[clicked_row][clicked_col] == ' ':
                     board[clicked_row][clicked_col] = current_player
-                    
-                    running = move_result(current_player)
+
+                    running = game_status(current_player)
                     current_player = 'O'
 
             if event.type == pygame.MOUSEBUTTONDOWN and current_player == 'O' and player2_type == 'human':
@@ -191,27 +231,27 @@ def play_game(player1_type, player2_type, computer_delay=0):
                 if board[clicked_row][clicked_col] == ' ':
                     board[clicked_row][clicked_col] = current_player
 
-                    running = move_result(current_player)
+                    running = game_status(current_player)
                     current_player = 'X'
 
         if current_player == 'X' and player1_type == 'computer':
-            computer_move_result = computer_move()
+            computer_move_result = computer_move(current_player=current_player)
             if computer_move_result:
                 time.sleep(computer_delay)
                 row, col = computer_move_result
                 board[row][col] = current_player
 
-                running = move_result(current_player)
+                running = game_status(current_player)
                 current_player = 'O'
 
         elif current_player == 'O' and player2_type == 'computer':
-            computer_move_result = computer_move()
+            computer_move_result = computer_move(current_player=current_player)
             if computer_move_result:
                 time.sleep(computer_delay)
                 row, col = computer_move_result
                 board[row][col] = current_player
 
-                running = move_result(current_player)
+                running = game_status(current_player)
                 current_player = 'X'
 
         # Draw the board
