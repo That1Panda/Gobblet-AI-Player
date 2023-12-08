@@ -6,7 +6,7 @@ class Algorithms:
     A class containing all the algorithms.
 
     Attributes:
-        board (list[list[str]]): a list of lists representing the game board
+        board (GameBoard): a list of lists representing the game board
         GRID_SIZE (int): the size of the board
     """
     def __init__(self,board,GRID_SIZE):

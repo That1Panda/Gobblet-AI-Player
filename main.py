@@ -76,7 +76,7 @@ def minimax(board, depth, is_maximizing, current_player):
     Performs the Minimax algorithm and returns the score of the board.
 
     Args:
-        board (list[list[str]]): a list of lists representing the game board
+        board (GameBoard): a list of lists representing the game board
         depth (int): the depth of the current node in the game tree
         is_maximizing (bool): True if the current node is a maximizing node, False otherwise
         current_player (str): a string representing the current player which is either 'X' or 'O'
@@ -117,7 +117,7 @@ def alpha_beta_pruning(board, depth, alpha, beta, is_maximizing, current_player)
     Performs the Alpha-Beta Pruning algorithm and returns the score of the board.
 
     Args:
-        board (list[list[str]]): a list of lists representing the game board
+        board (GameBoard): a list of lists representing the game board
         depth (int): the depth of the current node in the game tree
         alpha (float): the best value that the maximizing player can guarantee at the current level or above
         beta (float): the best value that the minimizing player can guarantee at the current level or above
@@ -166,7 +166,7 @@ def alpha_beta_pruning_iterative_deepening(board, max_depth, current_player):
     Performs Alpha-Beta Pruning with Iterative Deepening.
 
     Args:
-        board (list[list[str]]): a list of lists representing the game board
+        board (GameBoard): a list of lists representing the game board
         max_depth (int): the maximum depth to explore
         current_player (str): a string representing the current player which is either 'X' or 'O'
 
@@ -188,7 +188,7 @@ def alpha_beta_pruning_helper(board, depth, alpha, beta, is_maximizing, current_
     Helper function for Alpha-Beta Pruning with Iterative Deepening.
 
     Args:
-        board list[list[str]]: a list of lists representing the game board
+        board GameBoard: a list of lists representing the game board
         depth int: the depth of the current node in the game tree
         alpha float: the best value that the maximizing player can guarantee at the current level or above
         beta float: the best value that the minimizing player can guarantee at the current level or above
