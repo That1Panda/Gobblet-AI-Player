@@ -59,10 +59,17 @@ Follow these steps to get the game up and running on your local machine:
 
 ### **Running the Game**
 
-Now that you have set up the environment, you can run the Gobblet game:
+Now that you have set up the environment, you can run the Gobblet game either with:
 
 ```
 python main.py
+
+```
+or with :
+```
+python gameController.py human random computer random
+python gameController.py human random human random
+python gameController.py computer random computer random
 
 ```
 
