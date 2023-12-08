@@ -112,7 +112,7 @@ def minimax(board, depth, is_maximizing, current_player):
                     min_eval = min(min_eval, eval_score)
         return min_eval
     
-def alpha_beta_pruning(board, depth, alpha, beta, is_maximizing):
+def alpha_beta_pruning(board, depth, alpha, beta, is_maximizing, current_player):
     """
     Performs the Alpha-Beta Pruning algorithm and returns the score of the board.
 
@@ -122,6 +122,7 @@ def alpha_beta_pruning(board, depth, alpha, beta, is_maximizing):
         alpha (float): the best value that the maximizing player can guarantee at the current level or above
         beta (float): the best value that the minimizing player can guarantee at the current level or above
         is_maximizing (bool): True if the current node is a maximizing node, False otherwise
+        current_player (str): a string representing the current player which is either 'X' or 'O'
 
     Returns:
         int: the score of the board
@@ -136,8 +137,8 @@ def alpha_beta_pruning(board, depth, alpha, beta, is_maximizing):
         for row in range(GRID_SIZE):
             for col in range(GRID_SIZE):
                 if board[row][col] == ' ':
-                    board[row][col] = 'X'
-                    eval_score = alpha_beta_pruning(board, depth + 1, alpha, beta, False)
+                    board[row][col] = current_player
+                    eval_score = alpha_beta_pruning(board, depth + 1, alpha, beta, False, 'X' if current_player == 'O' else 'O')
                     board[row][col] = ' '  # Undo the move
 
                     max_eval = max(max_eval, eval_score)
@@ -150,8 +151,8 @@ def alpha_beta_pruning(board, depth, alpha, beta, is_maximizing):
         for row in range(GRID_SIZE):
             for col in range(GRID_SIZE):
                 if board[row][col] == ' ':
-                    board[row][col] = 'O'
-                    eval_score = alpha_beta_pruning(board, depth + 1, alpha, beta, True)
+                    board[row][col] = current_player
+                    eval_score = alpha_beta_pruning(board, depth + 1, alpha, beta, True, 'X' if current_player == 'O' else 'O')
                     board[row][col] = ' '  # Undo the move
 
                     min_eval = min(min_eval, eval_score)
@@ -160,13 +161,14 @@ def alpha_beta_pruning(board, depth, alpha, beta, is_maximizing):
                         break  # Alpha cutoff
         return min_eval
 
-def alpha_beta_pruning_iterative_deepening(board, max_depth):
+def alpha_beta_pruning_iterative_deepening(board, max_depth, current_player):
     """
     Performs Alpha-Beta Pruning with Iterative Deepening.
 
     Args:
         board (list[list[str]]): a list of lists representing the game board
         max_depth (int): the maximum depth to explore
+        current_player (str): a string representing the current player which is either 'X' or 'O'
 
     Returns:
         best_move (tuple): a tuple representing the row and column of the best move
@@ -176,13 +178,12 @@ def alpha_beta_pruning_iterative_deepening(board, max_depth):
     beta = float('inf')
 
     for depth in range(1, max_depth + 1):
-        move, _ = alpha_beta_pruning_helper(board, depth, alpha, beta, True)
+        move, _ = alpha_beta_pruning_helper(board, depth, alpha, beta, True, current_player)
         best_move = move
 
     return best_move
 
-
-def alpha_beta_pruning_helper(board, depth, alpha, beta, is_maximizing):
+def alpha_beta_pruning_helper(board, depth, alpha, beta, is_maximizing, current_player):
     """
     Helper function for Alpha-Beta Pruning with Iterative Deepening.
 
@@ -192,6 +193,7 @@ def alpha_beta_pruning_helper(board, depth, alpha, beta, is_maximizing):
         alpha float: the best value that the maximizing player can guarantee at the current level or above
         beta float: the best value that the minimizing player can guarantee at the current level or above
         is_maximizing bool: True if the current node is a maximizing node, False otherwise
+        current_player (str): a string representing the current player which is either 'X' or 'O'
 
     Returns:
         best_move (tuple): a tuple representing the row and column of the best move, and the score
@@ -209,8 +211,8 @@ def alpha_beta_pruning_helper(board, depth, alpha, beta, is_maximizing):
         for row in range(GRID_SIZE):
             for col in range(GRID_SIZE):
                 if board[row][col] == ' ':
-                    board[row][col] = 'X'
-                    _, eval_score = alpha_beta_pruning_helper(board, depth - 1, alpha, beta, False)
+                    board[row][col] = current_player
+                    _, eval_score = alpha_beta_pruning_helper(board, depth - 1, alpha, beta, False, 'X' if current_player == 'O' else 'O')
                     board[row][col] = ' '  # Undo the move
 
                     if eval_score > max_eval:
@@ -227,8 +229,8 @@ def alpha_beta_pruning_helper(board, depth, alpha, beta, is_maximizing):
         for row in range(GRID_SIZE):
             for col in range(GRID_SIZE):
                 if board[row][col] == ' ':
-                    board[row][col] = 'O'
-                    _, eval_score = alpha_beta_pruning_helper(board, depth - 1, alpha, beta, True)
+                    board[row][col] = current_player
+                    _, eval_score = alpha_beta_pruning_helper(board, depth - 1, alpha, beta, True, 'X' if current_player == 'O' else 'O')
                     board[row][col] = ' '  # Undo the move
 
                     if eval_score < min_eval:
