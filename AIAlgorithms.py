@@ -1,31 +1,32 @@
+from gameBoard import GameBoard
 class AIAlgorithms:
     """
     A class containing static methods for AI algorithms in the game.
 
     Methods:
-        minimax(board: list[list[str]], depth: int, is_maximizing: bool, current_player: str) -> int:
+        minimax(board: GameBoard, depth: int, is_maximizing: bool, current_player: str) -> int:
             Performs the Minimax algorithm and returns the score of the board.
 
-        alpha_beta_pruning(board: list[list[str]], depth: int, alpha: float, beta: float,
+        alpha_beta_pruning(board: GameBoard, depth: int, alpha: float, beta: float,
                            is_maximizing: bool, current_player: str) -> int:
             Performs the Alpha-Beta Pruning algorithm and returns the score of the board.
 
-        alpha_beta_pruning_iterative_deepening(board: list[list[str]], max_depth: int,
-                                               current_player: str) -> tuple[int, int]:
+        alpha_beta_pruning_iterative_deepening(board: GameBoard, max_depth: int,
+                                               current_player: str) -> tuple(int, int):
             Performs the Alpha-Beta Pruning algorithm with iterative deepening and returns the best move.
 
-        alpha_beta_pruning_helper(board: list[list[str]], depth: int, alpha: float, beta: float,
-                                  is_maximizing: bool, current_player: str) -> tuple[tuple[int, int], int]:
+        alpha_beta_pruning_helper(board: GameBoard, depth: int, alpha: float, beta: float,
+                                  is_maximizing: bool, current_player: str) -> tuple(tuple(int, int), int):
             Helper function for Alpha-Beta Pruning with Iterative Deepening.
     """
 
     @staticmethod
-    def minimax(board: list[list[str]], depth: int, is_maximizing: bool, current_player: str) -> int:
+    def minimax(board: GameBoard, depth: int, is_maximizing: bool, current_player: str) -> int:
         """
         Performs the Minimax algorithm and returns the score of the board.
 
         Args:
-            board (list[list[str]]): a list of lists representing the game board
+            board (GameBoard): a list of lists representing the game board
             depth (int): the depth of the current node in the game tree
             is_maximizing (bool): True if the current node is a maximizing node, False otherwise
             current_player (str): a string representing the current player which is either 'X' or 'O'
@@ -62,13 +63,13 @@ class AIAlgorithms:
             return min_eval
 
     @staticmethod
-    def alpha_beta_pruning(board: list[list[str]], depth: int, alpha: float, beta: float,
+    def alpha_beta_pruning(board: GameBoard, depth: int, alpha: float, beta: float,
                            is_maximizing: bool, current_player: str) -> int:
         """
         Performs the Alpha-Beta Pruning algorithm and returns the score of the board.
 
         Args:
-            board (list[list[str]]): a list of lists representing the game board
+            board (GameBoard): a list of lists representing the game board
             depth (int): the depth of the current node in the game tree
             alpha (float): the best value that the maximizing player can guarantee at the current level or above
             beta (float): the best value that the minimizing player can guarantee at the current level or above
@@ -115,18 +116,18 @@ class AIAlgorithms:
             return min_eval
 
     @staticmethod
-    def alpha_beta_pruning_iterative_deepening(board: list[list[str]], max_depth: int,
-                                               current_player: str) -> tuple[int, int]:
+    def alpha_beta_pruning_iterative_deepening(board: GameBoard, max_depth: int,
+                                               current_player: str) -> tuple:
         """
         Performs the Alpha-Beta Pruning algorithm with iterative deepening and returns the best move.
 
         Args:
-            board (list[list[str]]): a list of lists representing the game board
+            board (GameBoard): a list of lists representing the game board
             max_depth (int): the maximum depth to explore
             current_player (str): a string representing the current player which is either 'X' or 'O'
 
         Returns:
-            best_move (tuple[int, int]): the best move to make
+            best_move (tuple(int, int)): the best move to make
         """
         best_move = None
         alpha = float('-inf')
@@ -139,13 +140,13 @@ class AIAlgorithms:
         return best_move
 
     @staticmethod
-    def alpha_beta_pruning_helper(board: list[list[str]], depth: int, alpha: float, beta: float,
-                                  is_maximizing: bool, current_player: str) -> tuple[tuple[int, int], int]:
+    def alpha_beta_pruning_helper(board: GameBoard, depth: int, alpha: float, beta: float,
+                                  is_maximizing: bool, current_player: str) -> tuple:
         """
         Helper function for Alpha-Beta Pruning with Iterative Deepening.
 
         Args:
-            board (list[list[str]]): a list of lists representing the game board
+            board (GameBoard): a list of lists representing the game board
             depth (int): the depth of the current node in the game tree
             alpha (float): the best value that the maximizing player can guarantee at the current level or above
             beta (float): the best value that the minimizing player can guarantee at the current level or above
@@ -153,7 +154,7 @@ class AIAlgorithms:
             current_player (str): a string representing the current player which is either 'X' or 'O'
 
         Returns:
-            best_move (tuple[int, int]): the best move to make
+            best_move (tuple(int, int)): the best move to make
             min_eval/max_val (int): the score of the board
         """
         score = board.evaluate_board()
