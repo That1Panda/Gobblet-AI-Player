@@ -2,6 +2,7 @@ import pygame
 import sys
 import random
 import time
+import argparse
 from player import Player
 from gameBoard import GameBoard
 
@@ -87,7 +88,18 @@ class GameController:
 
 
 # Example Usage:
-player1 = Player(player_type='human', symbol='X')
-player2 = Player(player_type='computer', symbol='O', algo='random')
+parser = argparse.ArgumentParser(description='Play a game with two players.')
+    
+parser.add_argument('player1_type', help='Type of player 1 (human/computer)')
+parser.add_argument('algo1', help='Algorithm for player 1 (if computer)')
+
+parser.add_argument('player2_type', help='Type of player 2 (human/computer)')
+parser.add_argument('algo2', help='Algorithm for player 2 (if computer)')
+
+args = parser.parse_args()
+
+player1 = Player(player_type=args.player1_type, symbol='X', algo=args.algo1)
+player2 = Player(player_type=args.player2_type, symbol='Y', algo=args.algo2)
+
 game_controller = GameController(player1, player2)
 game_controller.play_game()
