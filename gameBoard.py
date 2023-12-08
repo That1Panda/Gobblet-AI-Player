@@ -4,7 +4,43 @@ import time
 import sys
 
 class GameBoard:
-    def __init__(self, grid_size):
+    """
+    A class representing the game board.
+
+    Attributes:
+        GRID_SIZE (int): the size of the game board
+        SQUARE_SIZE (int): the size of each square on the game board
+        board (GameBoard): a 2D list representing the state of the game board
+        WIDTH (int): the width of the game board
+        HEIGHT (int): the height of the game board
+        screen: the pygame screen object
+        WHITE (tuple): RGB tuple representing the color white
+        BLACK (tuple): RGB tuple representing the color black
+
+    Methods:
+        __init__(self, grid_size: int):
+            Initializes the game board with the given grid size.
+
+        draw_board(self):
+            Draws the game board on the screen.
+
+        check_win(self, player: str) -> bool:
+            Checks if the specified player has won the game.
+
+        evaluate_board(self) -> int or None:
+            Evaluates the current state of the game board and returns the score.
+
+        check_draw(self) -> bool:
+            Checks if the game is a draw.
+    """
+
+    def __init__(self, grid_size: int):
+        """
+        Initializes the game board with the given grid size.
+
+        Args:
+            grid_size (int): the size of the game board
+        """
         self.GRID_SIZE = grid_size
         self.SQUARE_SIZE = 400 // grid_size
         self.board = [[' ' for _ in range(grid_size)] for _ in range(grid_size)]
@@ -15,6 +51,9 @@ class GameBoard:
         self.BLACK = (0, 0, 0)
 
     def draw_board(self):
+        """
+        Draws the game board on the screen.
+        """
         self.screen.fill(self.WHITE)
         for row in range(self.GRID_SIZE):
             for col in range(self.GRID_SIZE):
@@ -32,7 +71,16 @@ class GameBoard:
 
         pygame.display.flip()
 
-    def check_win(self, player):
+    def check_win(self, player: str) -> bool:
+        """
+        Checks if the specified player has won the game.
+
+        Args:
+            player (str): a string representing the player ('X' or 'O')
+
+        Returns:
+            win (bool): True if the player has won, False otherwise.
+        """
         for row in range(self.GRID_SIZE):
             if all(self.board[row][col] == player for col in range(self.GRID_SIZE)):
                 return True
@@ -47,7 +95,13 @@ class GameBoard:
 
         return False
 
-    def evaluate_board(self):
+    def evaluate_board(self) -> int or None:
+        """
+        Evaluates the current state of the game board and returns the score.
+
+        Returns:
+            score (int | None): 1 if 'X' wins, -1 if 'O' wins, 0 for a draw, None if the game is ongoing.
+        """
         if self.check_win('X'):
             return 1
         elif self.check_win('O'):
@@ -57,8 +111,15 @@ class GameBoard:
 
         return None
 
-    def check_draw(self):
+    def check_draw(self) -> bool:
+        """
+        Checks if the game is a draw.
+
+        Returns:
+            draw (bool): True if the game is a draw, False otherwise.
+        """
         return all(self.board[row][col] != ' ' for row in range(self.GRID_SIZE) for col in range(self.GRID_SIZE))
+
 
 # Example Usage:
 # game_board = GameBoard(grid_size=4)
