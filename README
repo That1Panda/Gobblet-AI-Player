@@ -1,0 +1,87 @@
+# **Gobblet Game**
+
+Welcome to Gobblet, a two-player abstract strategy game implemented in Python using Pygame!
+
+## **Getting Started**
+
+Follow these steps to get the game up and running on your local machine:
+
+### **Prerequisites**
+
+- Python 3.x
+- Git
+
+### **Installation**
+
+1. Clone the repository to your local machine:
+    
+    ```
+    git clone https://github.com/That1Panda/Gobblet-AI-Player.git
+    
+    ```
+    
+2. Navigate to the project directory:
+    
+    ```
+    cd Gobblet-AI-Player
+    
+    ```
+    
+3. Create a virtual environment (optional but recommended):
+    
+    ```
+    python -m venv venv
+    
+    ```
+    
+4. Activate the virtual environment:
+    - On Windows:
+        
+        ```
+        .\venv\Scripts\activate
+        
+        ```
+        
+    - On macOS/Linux:
+        
+        ```
+        source venv/bin/activate
+        
+        ```
+        
+5. Install the required dependencies using pip:
+    
+    ```
+    pip install pygame
+    
+    ```
+    
+
+### **Running the Game**
+
+Now that you have set up the environment, you can run the Gobblet game either with:
+
+```
+python main.py
+
+```
+or with :
+```
+python gameController.py human random computer random
+python gameController.py human random human random
+python gameController.py computer random computer random
+
+```
+
+## **Game Modes**
+
+Choose your preferred game mode:
+
+- Human vs. Human
+- Human vs. Computer
+- Computer vs. Human
+- Computer vs. Computer
+
+Follow the on-screen instructions to make your moves.
+
+Enjoy the game!
