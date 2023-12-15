@@ -174,7 +174,7 @@ class Player:
 
 # Example Usage:
 # player1 = Player(player_type='human', symbol='X')
-# player2 = Player(player_type='computer', symbol='O', algo='alpha_beta_pruning')
+# player2 = Player(player_type='computer', symbol='O', algo='random')
 # board = GameBoard(grid_size=4)
 # board.draw_board()
 # move = player1.make_move(board)

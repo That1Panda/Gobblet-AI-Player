@@ -89,12 +89,13 @@ class GameController:
 
 # Example Usage:
 parser = argparse.ArgumentParser(description='Play a game with two players.')
-    
-parser.add_argument('player1_type', help='Type of player 1 (human/computer)')
-parser.add_argument('algo1', help='Algorithm for player 1 (if computer)')
 
-parser.add_argument('player2_type', help='Type of player 2 (human/computer)')
-parser.add_argument('algo2', help='Algorithm for player 2 (if computer)')
+# parser.add_argument('--player1' ,default='human', type=str,  help='Type of player 1 (human/computer)')
+parser.add_argument('--player1_type', '-p1', default='human', type=str, help='Type of player 1 (human/computer)')
+parser.add_argument('--algo1', '-a1',default='random', type=str, help='Algorithm for player 1 (if computer)')
+
+parser.add_argument('--player2_type', '-p2',default='computer', type=str,  help='Type of player 2 (human/computer)')
+parser.add_argument('--algo2', '-a2',default='random', type=str,  help='Algorithm for player 2 (if computer)')
 
 args = parser.parse_args()
 
