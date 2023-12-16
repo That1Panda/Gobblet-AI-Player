@@ -43,8 +43,10 @@ class GameBoard:
         """
         self.GRID_SIZE = grid_size
         self.SQUARE_SIZE = 400 // grid_size
+        self.EXTRA_SPACE = 2  # Number of extra grid blocks on each side
         self.board = [[' ' for _ in range(grid_size)] for _ in range(grid_size)]
-        self.WIDTH, self.HEIGHT = grid_size * self.SQUARE_SIZE, grid_size * self.SQUARE_SIZE
+        self.WIDTH = (grid_size + 2 * self.EXTRA_SPACE) * self.SQUARE_SIZE
+        self.HEIGHT = grid_size * self.SQUARE_SIZE
         self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption("Gobblet Game")
         self.WHITE = (255, 255, 255)
@@ -54,20 +56,31 @@ class GameBoard:
         """
         Draws the game board on the screen.
         """
-        self.screen.fill(self.WHITE)
+        self.screen.fill(self.BLACK)
         for row in range(self.GRID_SIZE):
-            for col in range(self.GRID_SIZE):
+            for col in range(self.EXTRA_SPACE, self.GRID_SIZE + self.EXTRA_SPACE):
                 pygame.draw.rect(self.screen, self.BLACK,
                                  (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE), 0)
                 pygame.draw.rect(self.screen, self.WHITE,
                                  (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE), 1)
 
-                if self.board[row][col] != ' ':
-                    piece = self.board[row][col]
+                if self.board[row][col - self.EXTRA_SPACE] != ' ':
+                    piece = self.board[row][col - self.EXTRA_SPACE]
                     pygame.draw.circle(self.screen, (255, 0, 0) if piece == 'X' else (0, 0, 255),
-                                       (col * self.SQUARE_SIZE + self.SQUARE_SIZE // 2,
+                                       ((col - self.EXTRA_SPACE) * self.SQUARE_SIZE + self.SQUARE_SIZE // 2,
                                         row * self.SQUARE_SIZE + self.SQUARE_SIZE // 2),
                                        self.SQUARE_SIZE // 3)
+        for row in range(3):
+            for col in range(1):
+                # divide the board into 3 parts where each part is a square make it a 3x1 big column on the left side
+                pygame.draw.rect(self.screen, self.BLACK,
+                                 (col * self.SQUARE_SIZE*2, row * int((self.SQUARE_SIZE*4)/3), self.SQUARE_SIZE*2, int((self.SQUARE_SIZE*4)/3)), 0)
+                pygame.draw.rect(self.screen, self.WHITE,
+                                    (col * self.SQUARE_SIZE*2, row * int((self.SQUARE_SIZE*4)/3), self.SQUARE_SIZE*2, int((self.SQUARE_SIZE*4)/3)), 1)
+                pygame.draw.rect(self.screen, self.BLACK,
+                                 (col * self.SQUARE_SIZE*2 + self.SQUARE_SIZE*6, row * int((self.SQUARE_SIZE*4)/3), self.SQUARE_SIZE*2, int((self.SQUARE_SIZE*4)/3)), 0)
+                pygame.draw.rect(self.screen, self.WHITE,
+                                    (col * self.SQUARE_SIZE*2 + self.SQUARE_SIZE*6, row * int((self.SQUARE_SIZE*4)/3), self.SQUARE_SIZE*2, int((self.SQUARE_SIZE*4)/3)), 1)
 
         pygame.display.flip()
 
@@ -122,8 +135,8 @@ class GameBoard:
 
 
 # Example Usage:
-# game_board = GameBoard(grid_size=4)
-# game_board.draw_board()
-# time.sleep(5)
-# pygame.quit()
-# sys.exit()
+game_board = GameBoard(grid_size=4)
+game_board.draw_board()
+time.sleep(5)
+pygame.quit()
+sys.exit()
