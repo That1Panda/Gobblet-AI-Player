@@ -40,8 +40,9 @@ class GameController:
         self.player1 = player1
         self.player2 = player2
         self.current_player = player1
-        self.board = GameBoard(grid_size=4)
-        self.board.draw_board()
+        self.board = GameBoard(grid_size=6)
+        self.board.draw_board(player1,player2)
+        self.board.assign_initial_values(player1,player2)
 
     def switch_player(self):
         """
@@ -59,12 +60,17 @@ class GameController:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
+                    pygame.quit()
+                    sys.exit()
 
-            move = self.current_player.make_move(self.board)
-            if move:
-                self.board.draw_board()
-                running = self.game_status()
-                self.switch_player()
+            # Pass the player states to draw_board
+            self.board.draw_board(self.player1, self.player2)
+            move = False
+            while move == False : 
+                move = self.current_player.make_move(self.board)
+                
+            running = self.game_status()
+            self.switch_player()
 
             pygame.display.flip()
 
@@ -88,19 +94,19 @@ class GameController:
 
 
 # Example Usage:
-parser = argparse.ArgumentParser(description='Play a game with two players.')
+#parser = argparse.ArgumentParser(description='Play a game with two players.')
 
 # parser.add_argument('--player1' ,default='human', type=str,  help='Type of player 1 (human/computer)')
-parser.add_argument('--player1_type', '-p1', default='human', type=str, help='Type of player 1 (human/computer)')
-parser.add_argument('--algo1', '-a1',default='random', type=str, help='Algorithm for player 1 (if computer)')
+#parser.add_argument('--player1_type', '-p1', default='human', type=str, help='Type of player 1 (human/computer)')
+#parser.add_argument('--algo1', '-a1',default='random', type=str, help='Algorithm for player 1 (if computer)')
 
-parser.add_argument('--player2_type', '-p2',default='computer', type=str,  help='Type of player 2 (human/computer)')
-parser.add_argument('--algo2', '-a2',default='random', type=str,  help='Algorithm for player 2 (if computer)')
+#parser.add_argument('--player2_type', '-p2',default='computer', type=str,  help='Type of player 2 (human/computer)')
+#parser.add_argument('--algo2', '-a2',default='random', type=str,  help='Algorithm for player 2 (if computer)')
 
-args = parser.parse_args()
+#args = parser.parse_args()
 
-player1 = Player(player_type=args.player1_type, symbol='X', algo=args.algo1)
-player2 = Player(player_type=args.player2_type, symbol='Y', algo=args.algo2)
+player1 = Player(player_type='human', symbol='X',color='W', algo='random')
+player2 = Player(player_type='human', symbol='Y',color='B', algo='random')
 
 game_controller = GameController(player1, player2)
 game_controller.play_game()
