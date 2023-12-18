@@ -110,7 +110,11 @@ class AIAlgorithms:
         Returns:
             able to move (bool): is this position can be apply this move
         """
-        return len(board.board[curmove.newRow][curmove.newCol])== 0 or board.board[curmove.newRow][curmove.newCol][-1].size < board.board[curmove.curRow][curmove.curCol][-1].size
+        if len(board.board[curmove.newRow][curmove.newCol])== 0 :
+            return True
+        gobblet1 = board.board[curmove.newRow][curmove.newCol][-1]
+        gobblet2 = board.board[curmove.curRow][curmove.curCol][-1]
+        return gobblet1.size < gobblet2.size
     
     @staticmethod
     def Generate_nextBoard(currentBoard : GameBoard, move: move):
@@ -148,42 +152,59 @@ class AIAlgorithms:
         for row in range(board.GRID_SIZE-2):
             score = 0
             for col in range(1,5):
-                if board.board[row][col][-1].symbol == 'X':
-                    score += 1
-                else:
-                    score = 0
-                    break
-            if score == 3: bounse += 1
+                if len(board.board[row][col]) != 0:
+                    Gobblet = board.board[row][col][-1]
+                    if Gobblet.symbol == 'X':
+                        score += 1
+                    else:
+                        score = 0
+                        break
+            if score == 3: 
+                bounse += 1
             max_score =max(max_score,score)
             
         for col in range(1,board.GRID_SIZE-1):
             score = 0
             for row in range(board.GRID_SIZE-2):
-                if board.board[row][col][-1].symbol == 'X':
-                    score += 1
-                elif board.board[row][col][-1].symbol == 'Y':
-                    score = 0
-                    break
+                if len(board.board[row][col]) != 0:
+                    Gobblet = board.board[row][col][-1]
+                    if Gobblet.symbol == 'X':
+                        score += 1
+                    elif Gobblet.symbol == 'Y':
+                        score = 0
+                        break
             if score == 3: bounse += 1
             max_score =max(max_score,score)
         
         score = 0
+
         for i in range(board.GRID_SIZE-2):
-            if board.board[i][i+1][-1].symbol == 'X':
-                score += 1
-            elif board.board[i][i+1][-1].symbol == 'Y':
-                score = 0
-                break
+            if len(board.board[i][i+1])!= 0 :
+                Gobblet = board.board[i][i+1][-1]
+                if Gobblet.symbol == 'X':
+                    score += 1
+            
+            elif len(board.board[i][i+1])!= 0 :
+                Gobblet = board.board[i][i+1][-1]
+                if Gobblet.symbol == 'Y':
+                    score = 0
+                    break
         if score == 3: bounse += 1
         max_score =max(max_score,score)
         
         score = 0
         for i in range(board.GRID_SIZE-2):
-            if board.board[i][4-i][-1].symbol == 'X':
-                score += 1
-            elif board.board[i][4-i][-1].symbol == 'Y':
-                score = 0
-                break
+            if len(board.board[i][4-i])!= 0 :
+                Gobblet = board.board[i][4-i][-1]
+                if Gobblet.symbol == 'X':
+                    score += 1
+            
+            elif len(board.board[i][4-i])!= 0 :
+                Gobblet = board.board[i][4-i][-1]
+                if Gobblet.symbol == 'Y':
+                    score = 0
+                    break
+            
         if score == 3: bounse += 1
         max_score =max(max_score,score)
         
@@ -191,43 +212,60 @@ class AIAlgorithms:
         Omax_score = 0
         for row in range(board.GRID_SIZE-2):
             score = 0
-            for col in range(1,board.GRID_SIZE-1):
-                if board.board[row][col][-1].symbol == 'Y':
-                    score += 1
-                else:
-                    score = 0
-                    break
-            if score == 3: Obounse += 1
+            for col in range(1,5):
+                if len(board.board[row][col]) != 0:
+                    Gobblet = board.board[row][col][-1]
+                    if Gobblet.symbol == 'Y':
+                        score += 1
+                    else:
+                        score = 0
+                        break
+            if score == 3: 
+                Obounse += 1
             Omax_score =max(Omax_score,score)
             
         for col in range(1,board.GRID_SIZE-1):
             score = 0
             for row in range(board.GRID_SIZE-2):
-                if board.board[row][col][-1].symbol == 'Y':
-                    score += 1
-                elif board.board[row][col][-1].symbol == 'X':
-                    score = 0
-                    break
+                if len(board.board[row][col]) != 0:
+                    Gobblet = board.board[row][col][-1]
+                    if Gobblet.symbol == 'Y':
+                        score += 1
+                    elif Gobblet.symbol == 'X':
+                        score = 0
+                        break
             if score == 3: Obounse += 1
             Omax_score =max(Omax_score,score)
         
         score = 0
+        
         for i in range(board.GRID_SIZE-2):
-            if board.board[i][i+1][-1].symbol == 'Y':
-                score += 1
-            elif board.board[i][i+1][-1].symbol == 'X':
-                score = 0
-                break
+            if len(board.board[i][i+1])!= 0 :
+                Gobblet = board.board[i][i+1][-1]
+                if Gobblet.symbol == 'Y':
+                    score += 1
+            
+            elif len(board.board[i][i+1])!= 0 :
+                Gobblet = board.board[i][i+1][-1]
+                if Gobblet.symbol == 'X':
+                    score = 0
+                    break
         if score == 3: Obounse += 1
         Omax_score =max(Omax_score,score)
         
         score = 0
         for i in range(board.GRID_SIZE-2):
-            if board.board[i][board.GRID_SIZE-2-i][-1].symbol == 'Y':
-                score += 1
-            elif board.board[i][board.GRID_SIZE-2-i][-1].symbol == 'X':
-                score = 0
-                break
+            if len(board.board[i][4-i])!= 0 :
+                Gobblet = board.board[i][4-i][-1]
+                if Gobblet.symbol == 'Y':
+                    score += 1
+            
+            elif len(board.board[i][4-i])!= 0 :
+                Gobblet = board.board[i][4-i][-1]
+                if Gobblet.symbol == 'X':
+                    score = 0
+                    break
+            
         if score == 3: Obounse += 1
         Omax_score =max(Omax_score,score)
         
@@ -259,10 +297,10 @@ class AIAlgorithms:
         """
         score = board.evaluate_board() 
         if score is not None:
-            return score*100 /depth, None
+            return score*100 /depth
         
         if depth == max_depth:
-            # return self.scoring(board) / depth, board, None
+            return AIAlgorithms.scoring(board) / depth
             #return 0
             if is_maximizing:
                 return float('inf'), None
@@ -277,7 +315,7 @@ class AIAlgorithms:
             best_move = None
             for move in moves:
                 AIAlgorithms.Generate_nextBoard(board, move)
-                eval_score,best_move = AIAlgorithms.alpha_beta_pruning(self, board, depth + 1, max_depth, False,'X' if current_player == 'Y' else 'Y',alpha, beta, start_time, time_limit )
+                eval_score= AIAlgorithms.alpha_beta_pruning(self, board, depth + 1, max_depth, False,'X' if current_player == 'Y' else 'Y',alpha, beta, start_time, time_limit )
                 if(max_eval < eval_score):
                     max_eval = eval_score 
                     # best_board.board = copy.deepcopy(board.board)
@@ -288,11 +326,11 @@ class AIAlgorithms:
                 if beta <= alpha:
                     break  # Beta cutoff
                 
-                # if time.time() - start_time > time_limit:
-                #     # print(f"Time limit ({time_limit} seconds) exceeded. Terminating search.")
-                #     return max_eval, best_board, best_move
+                if time.time() - start_time > time_limit:
+                    # print(f"Time limit ({time_limit} seconds) exceeded. Terminating search.")
+                    return best_move
 
-            return max_eval, best_move
+            return best_move
         
         else:
             min_eval = float('inf')
@@ -303,7 +341,7 @@ class AIAlgorithms:
             
             for move in moves:
                 AIAlgorithms.Generate_nextBoard(board, move)
-                eval_score,best_move =  AIAlgorithms.alpha_beta_pruning(self, board, depth + 1, max_depth, True, 'X' if current_player == 'Y' else 'Y', alpha, beta, start_time, time_limit)
+                eval_score =  AIAlgorithms.alpha_beta_pruning(self, board, depth + 1, max_depth, True, 'X' if current_player == 'Y' else 'Y', alpha, beta, start_time, time_limit)
                 
                 if(min_eval > eval_score):
                     min_eval = eval_score 
@@ -315,13 +353,14 @@ class AIAlgorithms:
                 if beta <= alpha:
                     break  # Alpha cutoff
                 
-                # if time.time() - start_time > time_limit:
+                if time.time() - start_time > time_limit:
                 #     # print(f"Time limit ({time_limit} seconds) exceeded. Terminating search.")
-                #     return min_eval, best_board, best_move
+                    return best_move
 
                 if beta <= alpha:
                         break  # Alpha cutoff
-            return min_eval ,best_move
+                
+            return best_move
                     
     @staticmethod
     def get_best_move(self, board: GameBoard, is_max: bool, player_type: str, diffcult: int, time_limit:int=5):
@@ -360,17 +399,17 @@ class AIAlgorithms:
             if best_move:
                 print(f"Depth {depth - 1} completed in {time.time() - start_time:.2f} seconds")
 
-            val, bestMove = AIAlgorithms.alpha_beta_pruning(self, board, 0, depth, is_max, player_type, float('-inf'),float('inf'), t, time_limit)
+            bestMove = AIAlgorithms.alpha_beta_pruning(self, board, 0, depth, is_max, player_type, float('-inf'),float('inf'), t, time_limit)
             
-            print("val: " + str(val) + ", best: " + str(best_val))
-            # print(move.board)
-            if time.time() - start_time <= time_limit:
-                print(f"Time inside decision: {time.time() - start_time:.2f} seconds")
-                best_move = move
-                best_val = val 
-            depth += 1
-        print(f"Interrupted Depth {depth - 1} completed in {time.time() - start_time:.2f} seconds")
-        # print("best: " + str(best_move.board))
+        #     print("val: " + str(val) + ", best: " + str(best_val))
+        #     # print(move.board)
+        #     if time.time() - start_time <= time_limit:
+        #         print(f"Time inside decision: {time.time() - start_time:.2f} seconds")
+        #         best_move = move
+        #         best_val = val 
+        #     depth += 1
+        # print(f"Interrupted Depth {depth - 1} completed in {time.time() - start_time:.2f} seconds")
+        # # print("best: " + str(best_move.board))
         return  bestMove
 
    

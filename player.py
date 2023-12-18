@@ -208,17 +208,23 @@ class Player:
         
         """
         AI = AIAlgorithms
-        score  ,best_move = AIAlgorithms.get_best_move(AI,board,False, 'Y', 3, 15)
+        best_move = AIAlgorithms.get_best_move(AI,board,False, 'Y', 3, 15)
+        print(best_move.curRow, best_move.curCol,best_move.newRow,best_move.newCol)
         #row, col = best_move
-        if best_move.curRow in range(0,3) and (best_move.curCol == 0 or best_move.curCol == 5):
+        if best_move.curRow in range(0,3) and (best_move.curCol == 5):
+            
             if len(board.board[best_move.newRow][best_move.newCol]) == 0:
                 board.board[best_move.newRow][best_move.newCol].append(self.stacks[best_move.curRow].pop())
 
                 if len(self.stacks[best_move.curRow]) !=0:
                     self.stacks[best_move.curRow][-1].is_EXT = True
             else :
-                if board.board[best_move.curRow][best_move.curCol][-1].size < self.stacks[best_move.curRow][-1].size:
-                    board.board[best_move.curRow][best_move.curCol].append(self.stacks[best_move.curRow].pop())
+                if board.board[best_move.newRow][best_move.newCol][-1].size < self.stacks[best_move.curRow][-1].size:
+                    board.board[best_move.newRow][best_move.newCol].append(self.stacks[best_move.curRow].pop())
+                    self.stacks[best_move.curRow][-1].is_EXT = True
+
+        elif best_move.curRow in range(0,4) and (best_move.curCol in range (1,5)):
+                board.board[best_move.newRow][best_move.newCol].append(board.board[best_move.curRow][best_move.curCol].pop())
 
         return best_move
 
