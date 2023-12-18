@@ -263,7 +263,7 @@ class AIAlgorithms:
         
         if depth == max_depth:
             # return self.scoring(board) / depth, board, None
-            # return 0,board, None
+            return 0,board, None
             if is_maximizing:
                 return float('inf'),board, None
             else:
