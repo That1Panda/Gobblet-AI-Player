@@ -109,7 +109,7 @@ class Player:
                         print("Please select any rect in the board")
                         continue
                     
-                    if clicked_row in range (0,4) and clicked_col in range (1,4):
+                    if clicked_row in range (0,4) and clicked_col in range (1,5):
                         if selected_row in range(0,3) and (selected_col == 0 or selected_col == 5):
                             if len(board.board[clicked_row][clicked_col]) == 0:
                                 board.board[clicked_row][clicked_col].append(self.stacks[selected_row].pop())
@@ -208,10 +208,23 @@ class Player:
         
         """
         AI = AIAlgorithms
-        score , nextboard ,best_move = AIAlgorithms.get_best_move(AI,board,False, 'Y', 3, 5)
+        score  ,best_move = AIAlgorithms.get_best_move(AI,board,False, 'Y', 3, 15)
         #row, col = best_move
-        board.board[best_move.newRow][best_move.newCol].append(board.board[best_move.curRow][best_move.curCol].pop())
+        if best_move.curRow in range(0,3) and (best_move.curCol == 0 or best_move.curCol == 5):
+            if len(board.board[best_move.newRow][best_move.newCol]) == 0:
+                board.board[best_move.newRow][best_move.newCol].append(self.stacks[best_move.curRow].pop())
+
+                if len(self.stacks[best_move.curRow]) !=0:
+                    self.stacks[best_move.curRow][-1].is_EXT = True
+            else :
+                if board.board[best_move.curRow][best_move.curCol][-1].size < self.stacks[best_move.curRow][-1].size:
+                    board.board[best_move.curRow][best_move.curCol].append(self.stacks[best_move.curRow].pop())
+
         return best_move
+
+    
+
+
 
 
 # Example Usage:
