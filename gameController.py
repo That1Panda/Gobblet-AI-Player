@@ -106,7 +106,8 @@ class GameController:
 #args = parser.parse_args()
 
 player1 = Player(player_type='human', symbol='X',color='W', algo='random')
-player2 = Player(player_type='human', symbol='Y',color='B', algo='random')
+player2 = Player(player_type='computer', symbol='Y',color='B', algo='alpha_beta_pruning')
+
 
 game_controller = GameController(player1, player2)
 game_controller.play_game()
