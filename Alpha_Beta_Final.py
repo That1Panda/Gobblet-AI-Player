@@ -161,7 +161,7 @@ class AIAlgorithms:
             for row in range(board.GRID_SIZE-2):
                 if board.board[row][col][-1].symbol == 'X':
                     score += 1
-                elif board.board[row][col][-1].symbol == 'O':
+                elif board.board[row][col][-1].symbol == 'Y':
                     score = 0
                     break
             if score == 3: bounse += 1
@@ -171,7 +171,7 @@ class AIAlgorithms:
         for i in range(board.GRID_SIZE-2):
             if board.board[i][i+1][-1].symbol == 'X':
                 score += 1
-            elif board.board[i][i+1][-1].symbol == 'O':
+            elif board.board[i][i+1][-1].symbol == 'Y':
                 score = 0
                 break
         if score == 3: bounse += 1
@@ -181,7 +181,7 @@ class AIAlgorithms:
         for i in range(board.GRID_SIZE-2):
             if board.board[i][4-i][-1].symbol == 'X':
                 score += 1
-            elif board.board[i][4-i][-1].symbol == 'O':
+            elif board.board[i][4-i][-1].symbol == 'Y':
                 score = 0
                 break
         if score == 3: bounse += 1
@@ -192,7 +192,7 @@ class AIAlgorithms:
         for row in range(board.GRID_SIZE-2):
             score = 0
             for col in range(1,board.GRID_SIZE-1):
-                if board.board[row][col][-1].symbol == 'O':
+                if board.board[row][col][-1].symbol == 'Y':
                     score += 1
                 else:
                     score = 0
@@ -203,7 +203,7 @@ class AIAlgorithms:
         for col in range(1,board.GRID_SIZE-1):
             score = 0
             for row in range(board.GRID_SIZE-2):
-                if board.board[row][col][-1].symbol == 'O':
+                if board.board[row][col][-1].symbol == 'Y':
                     score += 1
                 elif board.board[row][col][-1].symbol == 'X':
                     score = 0
@@ -213,7 +213,7 @@ class AIAlgorithms:
         
         score = 0
         for i in range(board.GRID_SIZE-2):
-            if board.board[i][i+1][-1].symbol == 'O':
+            if board.board[i][i+1][-1].symbol == 'Y':
                 score += 1
             elif board.board[i][i+1][-1].symbol == 'X':
                 score = 0
@@ -223,7 +223,7 @@ class AIAlgorithms:
         
         score = 0
         for i in range(board.GRID_SIZE-2):
-            if board.board[i][board.GRID_SIZE-2-i][-1].symbol == 'O':
+            if board.board[i][board.GRID_SIZE-2-i][-1].symbol == 'Y':
                 score += 1
             elif board.board[i][board.GRID_SIZE-2-i][-1].symbol == 'X':
                 score = 0
@@ -262,7 +262,7 @@ class AIAlgorithms:
             return score*100 / depth, board, None
         
         if depth == max_depth:
-            return self.scoring(board) / depth, board, None
+            # return self.scoring(board) / depth, board, None
             # return 0,board, None
             if is_maximizing:
                 return float('inf'),board, None
@@ -277,7 +277,7 @@ class AIAlgorithms:
             best_move = None
             for move in moves:
                 AIAlgorithms.Generate_nextBoard(board, move)
-                eval_score, temp_board,curmove = AIAlgorithms.alpha_beta_pruning(self, board, depth + 1, max_depth, False,'X' if current_player == 'O' else 'O',alpha, beta, start_time, time_limit )
+                eval_score, temp_board,curmove = AIAlgorithms.alpha_beta_pruning(self, board, depth + 1, max_depth, False,'X' if current_player == 'Y' else 'Y',alpha, beta, start_time, time_limit )
                 if(max_eval < eval_score):
                     max_eval = eval_score 
                     best_board.board = copy.deepcopy(board.board)
@@ -288,21 +288,22 @@ class AIAlgorithms:
                 if beta <= alpha:
                     break  # Beta cutoff
                 
-                if time.time() - start_time > time_limit:
-                    # print(f"Time limit ({time_limit} seconds) exceeded. Terminating search.")
-                    return max_eval, best_board, best_move
+                # if time.time() - start_time > time_limit:
+                #     # print(f"Time limit ({time_limit} seconds) exceeded. Terminating search.")
+                #     return max_eval, best_board, best_move
 
             return max_eval, best_board, best_move
         
         else:
             min_eval = float('inf')
             best_board = GameBoard(grid_size=6) 
-            best_board.board = board.board.copy()
+            best_board.board = copy.deepcopy(board.board)
             best_move = None
             moves = AIAlgorithms.get_nextMoves(self, board,current_player)
+            
             for move in moves:
                 AIAlgorithms.Generate_nextBoard(board, move)
-                eval_score, temp_board,curmove =  AIAlgorithms.alpha_beta_pruning(self, board, depth + 1, max_depth, True, 'X' if current_player == 'O' else 'O', alpha, beta, start_time, time_limit)
+                eval_score, temp_board,curmove =  AIAlgorithms.alpha_beta_pruning(self, board, depth + 1, max_depth, True, 'X' if current_player == 'Y' else 'Y', alpha, beta, start_time, time_limit)
                 
                 if(min_eval > eval_score):
                     min_eval = eval_score 
@@ -315,9 +316,9 @@ class AIAlgorithms:
                 if beta <= alpha:
                     break  # Alpha cutoff
                 
-                if time.time() - start_time > time_limit:
-                    # print(f"Time limit ({time_limit} seconds) exceeded. Terminating search.")
-                    return min_eval, best_board, best_move
+                # if time.time() - start_time > time_limit:
+                #     # print(f"Time limit ({time_limit} seconds) exceeded. Terminating search.")
+                #     return min_eval, best_board, best_move
 
                 if beta <= alpha:
                         break  # Alpha cutoff
@@ -370,7 +371,7 @@ class AIAlgorithms:
                 best_val = val 
             depth += 1
         print(f"Interrupted Depth {depth - 1} completed in {time.time() - start_time:.2f} seconds")
-        print("best: " + str(best_move.board))
+        # print("best: " + str(best_move.board))
         return best_val, best_move, bestMove
 
    

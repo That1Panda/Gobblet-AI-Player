@@ -150,7 +150,7 @@ class GameBoard:
         """
         if self.check_win('X'):
             return 1
-        elif self.check_win('O'):
+        elif self.check_win('Y'):
             return -1
         elif self.check_draw():
             return 0

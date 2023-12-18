@@ -197,6 +197,7 @@ class Player:
 
     def alpha_beta_pruning_move(self, board: GameBoard) -> tuple or None:
         """
+        
         Makes a move for the computer player using the Alpha-Beta Pruning algorithm.
 
         Args:
@@ -204,9 +205,10 @@ class Player:
 
         Returns:
             best_move (tuple or None): the coordinates of the best move (row, column)
+        
         """
         AI = AIAlgorithms
-        score , nextboard ,best_move = AIAlgorithms.get_best_move(AI,board,False, 'O', 3, 15)
+        score , nextboard ,best_move = AIAlgorithms.get_best_move(AI,board,False, 'Y', 3, 5)
         #row, col = best_move
         board.board[best_move.newRow][best_move.newCol].append(board.board[best_move.curRow][best_move.curCol].pop())
         return best_move
