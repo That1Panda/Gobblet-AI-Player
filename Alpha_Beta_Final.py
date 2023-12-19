@@ -295,12 +295,16 @@ class AIAlgorithms:
             best_board (GameBoard): board after make move
             best_move (move); the move that it make
         """
-        score = board.evaluate_board() 
+        # if len(board.board[1][4]) > 0 and len(board.board[1][3]) > 0 and len(board.board[1][2]) > 0 and   board.board[1][4][-1].symbol == 'X':
+        #     print("Debug")
+        score = board.evaluate_board()
+
         if score is not None:
-            return score*100 /depth
+            # print("enter Score")
+            return score*100 , None
         
         if depth == max_depth:
-            return AIAlgorithms.scoring(board) / depth
+            # return AIAlgorithms.scoring(board), None
             #return 0
             if is_maximizing:
                 return float('inf'), None
@@ -315,7 +319,7 @@ class AIAlgorithms:
             best_move = None
             for move in moves:
                 AIAlgorithms.Generate_nextBoard(board, move)
-                eval_score= AIAlgorithms.alpha_beta_pruning(self, board, depth + 1, max_depth, False,'X' if current_player == 'Y' else 'Y',alpha, beta, start_time, time_limit )
+                eval_score, eval_move = AIAlgorithms.alpha_beta_pruning(self, board, depth + 1, max_depth, False,'X' if current_player == 'Y' else 'Y',alpha, beta, start_time, time_limit )
                 if(max_eval < eval_score):
                     max_eval = eval_score 
                     # best_board.board = copy.deepcopy(board.board)
@@ -326,11 +330,11 @@ class AIAlgorithms:
                 if beta <= alpha:
                     break  # Beta cutoff
                 
-                if time.time() - start_time > time_limit:
+                # if time.time() - start_time > time_limit:
                     # print(f"Time limit ({time_limit} seconds) exceeded. Terminating search.")
-                    return best_move
+                    # return max_eval,best_move
 
-            return best_move
+            return max_eval, best_move
         
         else:
             min_eval = float('inf')
@@ -341,7 +345,7 @@ class AIAlgorithms:
             
             for move in moves:
                 AIAlgorithms.Generate_nextBoard(board, move)
-                eval_score =  AIAlgorithms.alpha_beta_pruning(self, board, depth + 1, max_depth, True, 'X' if current_player == 'Y' else 'Y', alpha, beta, start_time, time_limit)
+                eval_score, eval_move =  AIAlgorithms.alpha_beta_pruning(self, board, depth + 1, max_depth, True, 'X' if current_player == 'Y' else 'Y', alpha, beta, start_time, time_limit)
                 
                 if(min_eval > eval_score):
                     min_eval = eval_score 
@@ -353,14 +357,14 @@ class AIAlgorithms:
                 if beta <= alpha:
                     break  # Alpha cutoff
                 
-                if time.time() - start_time > time_limit:
+                # if time.time() - start_time > time_limit:
                 #     # print(f"Time limit ({time_limit} seconds) exceeded. Terminating search.")
-                    return best_move
+                    # return min_eval, best_move
 
                 if beta <= alpha:
                         break  # Alpha cutoff
                 
-            return best_move
+            return min_eval, best_move
                     
     @staticmethod
     def get_best_move(self, board: GameBoard, is_max: bool, player_type: str, diffcult: int, time_limit:int=5):
@@ -389,7 +393,7 @@ class AIAlgorithms:
         if diffcult == 1:
             max_depth = 2
         elif diffcult == 2:
-            max_depth = 4
+            max_depth = 3
         else:
             max_depth = 8    
         # max_depth = diffcult
@@ -399,8 +403,8 @@ class AIAlgorithms:
             if best_move:
                 print(f"Depth {depth - 1} completed in {time.time() - start_time:.2f} seconds")
 
-            bestMove = AIAlgorithms.alpha_beta_pruning(self, board, 0, depth, is_max, player_type, float('-inf'),float('inf'), t, time_limit)
-            
+            eval_score, bestMove = AIAlgorithms.alpha_beta_pruning(self, board, 0, depth, is_max, player_type, float('-inf'),float('inf'), t, time_limit)
+            depth += 1
         #     print("val: " + str(val) + ", best: " + str(best_val))
         #     # print(move.board)
         #     if time.time() - start_time <= time_limit:
