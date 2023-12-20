@@ -17,7 +17,7 @@ class GobbletNode:
         __init__(self, size: int, color: str):
             Initializes the GobbletNode with the specified size and color.
     """
-    def __init__(self, size: int, color: str, symbol: str, row, col, is_EXT: bool = False):
+    def __init__(self, size: int, color: str, symbol: str,  is_EXT: bool = False):
         self.size = size
         self.color = color
         self.symbol = symbol
@@ -68,7 +68,7 @@ class Player:
         """
         if self.player_type == 'human':
             return self.human_move(board)
-        elif self.player_type == 'computer':
+        elif self.player_type == 'computer1' or self.player_type == 'computer2':
             return self.computer_move(board)
         else:
             raise ValueError("Invalid player type")
@@ -201,10 +201,10 @@ class Player:
         
         """
         AI = AIAlgorithms
-        best_move = AIAlgorithms.get_best_move(AI,board,False, 'Y', 1, 15)
+        best_move = AIAlgorithms.get_best_move(AI,board,self.player_type == 'computer1' , self.symbol, 1, 15)
         print(best_move.curRow, best_move.curCol,best_move.newRow,best_move.newCol)
         #row, col = best_move
-        if best_move.curRow in range(0,3) and (best_move.curCol == 5):
+        if best_move.curRow in range(0,3) and ((best_move.curCol == 5) or (best_move.curCol== 0)):
             
             if len(board.board[best_move.newRow][best_move.newCol]) == 0:
                 board.board[best_move.newRow][best_move.newCol].append(self.stacks[best_move.curRow].pop())
@@ -212,7 +212,6 @@ class Player:
                 if len(self.stacks[best_move.curRow]) !=0:
                     self.stacks[best_move.curRow][-1].is_EXT = True
             else :
-                if board.board[best_move.newRow][best_move.newCol][-1].size < self.stacks[best_move.curRow][-1].size:
                     board.board[best_move.newRow][best_move.newCol].append(self.stacks[best_move.curRow].pop())
                     self.stacks[best_move.curRow][-1].is_EXT = True
 

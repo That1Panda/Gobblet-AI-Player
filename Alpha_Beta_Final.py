@@ -417,7 +417,7 @@ class AIAlgorithms:
             if time.time() - start_time < time_limit:
                 print(f"Time inside decision: {time.time() - start_time:.2f} seconds")
                 best_move = cur_Move
-                print(best_move.curRow, best_move.curCol,best_move.newRow, best_move.newCol)
+                time.sleep(1)
                 # best_val = val 
         #     depth += 1
         # print(f"Interrupted Depth {depth - 1} completed in {time.time() - start_time:.2f} seconds")
