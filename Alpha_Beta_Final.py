@@ -398,9 +398,9 @@ class AIAlgorithms:
         else:
             best_val = float('inf')
         if diffcult == 1:
-            max_depth = 2
+            max_depth = 1
         elif diffcult == 2:
-            max_depth = 4
+            max_depth = 2
         else:
             max_depth = 8    
         # max_depth = diffcult
