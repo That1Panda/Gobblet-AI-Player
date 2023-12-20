@@ -64,7 +64,7 @@ class AIAlgorithms:
         moves = []
         #get current gobblet
         for crow in range(board.GRID_SIZE-2):
-            for ccol in range(1,board.GRID_SIZE):
+            for ccol in range(board.GRID_SIZE):
                 #check if this position contain a free globblet of my own to be move
                 if AIAlgorithms.gobblet_exist(board, crow,ccol, palyer_type):
                     #get next position
@@ -301,10 +301,10 @@ class AIAlgorithms:
 
         if score is not None:
             # print("enter Score")
-            return score*100 , None
+            return ((score*1000)/ depth) , None
         
         if depth == max_depth:
-            # return AIAlgorithms.scoring(board), None
+            return AIAlgorithms.scoring(board) /depth, None
             #return 0
             if is_maximizing:
                 return float('inf'), None
@@ -318,6 +318,7 @@ class AIAlgorithms:
             moves = AIAlgorithms.get_nextMoves(self, board,current_player)
             best_move = None
             for move in moves:
+
                 AIAlgorithms.Generate_nextBoard(board, move)
                 eval_score, eval_move = AIAlgorithms.alpha_beta_pruning(self, board, depth + 1, max_depth, False,'X' if current_player == 'Y' else 'Y',alpha, beta, start_time, time_limit )
                 if(max_eval < eval_score):
@@ -330,9 +331,9 @@ class AIAlgorithms:
                 if beta <= alpha:
                     break  # Beta cutoff
                 
-                # if time.time() - start_time > time_limit:
-                    # print(f"Time limit ({time_limit} seconds) exceeded. Terminating search.")
-                    # return max_eval,best_move
+                if time.time() - start_time > time_limit:
+                    print(f"Time limit ({time_limit} seconds) exceeded. Terminating search.")
+                    return float('inf'),best_move
 
             return max_eval, best_move
         
@@ -344,10 +345,16 @@ class AIAlgorithms:
             moves = AIAlgorithms.get_nextMoves(self, board,current_player)
             
             for move in moves:
+                # if move.curCol == 0 and len(board.board[2][3]) > 0 and board.board[2][3][-1].symbol == 'X':
+                    # if move.newCol == 4 and move.newRow == 3:
+                    # # if move.curCol == 0 and len(board.board[2][3]) > 0 and board.board[2][3][-1].symbol == 'X':                    
+                    #      print("Enter Debug")
                 AIAlgorithms.Generate_nextBoard(board, move)
                 eval_score, eval_move =  AIAlgorithms.alpha_beta_pruning(self, board, depth + 1, max_depth, True, 'X' if current_player == 'Y' else 'Y', alpha, beta, start_time, time_limit)
                 
                 if(min_eval > eval_score):
+                    # if move.newCol == 4 and move.newRow == 3:
+                    #     print("debug")
                     min_eval = eval_score 
                     best_move = move
                     
@@ -357,9 +364,9 @@ class AIAlgorithms:
                 if beta <= alpha:
                     break  # Alpha cutoff
                 
-                # if time.time() - start_time > time_limit:
-                #     # print(f"Time limit ({time_limit} seconds) exceeded. Terminating search.")
-                    # return min_eval, best_move
+                if time.time() - start_time > time_limit:
+                    print(f"Time limit ({time_limit} seconds) exceeded. Terminating search.")
+                    return float('-inf'), best_move
 
                 if beta <= alpha:
                         break  # Alpha cutoff
@@ -393,7 +400,7 @@ class AIAlgorithms:
         if diffcult == 1:
             max_depth = 2
         elif diffcult == 2:
-            max_depth = 3
+            max_depth = 4
         else:
             max_depth = 8    
         # max_depth = diffcult
@@ -403,18 +410,19 @@ class AIAlgorithms:
             if best_move:
                 print(f"Depth {depth - 1} completed in {time.time() - start_time:.2f} seconds")
 
-            eval_score, bestMove = AIAlgorithms.alpha_beta_pruning(self, board, 0, depth, is_max, player_type, float('-inf'),float('inf'), t, time_limit)
+            eval_score, cur_Move = AIAlgorithms.alpha_beta_pruning(self, board, 0, depth, is_max, player_type, float('-inf'),float('inf'), t, time_limit)
             depth += 1
         #     print("val: " + str(val) + ", best: " + str(best_val))
         #     # print(move.board)
-        #     if time.time() - start_time <= time_limit:
-        #         print(f"Time inside decision: {time.time() - start_time:.2f} seconds")
-        #         best_move = move
-        #         best_val = val 
+            if time.time() - start_time < time_limit:
+                print(f"Time inside decision: {time.time() - start_time:.2f} seconds")
+                best_move = cur_Move
+                print(best_move.curRow, best_move.curCol,best_move.newRow, best_move.newCol)
+                # best_val = val 
         #     depth += 1
         # print(f"Interrupted Depth {depth - 1} completed in {time.time() - start_time:.2f} seconds")
         # # print("best: " + str(best_move.board))
-        return  bestMove
+        return  best_move
 
    
 
