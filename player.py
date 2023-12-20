@@ -22,8 +22,7 @@ class GobbletNode:
         self.color = color
         self.symbol = symbol
         self.is_EXT = is_EXT
-        self.row = row
-        self.col = col
+
 
 
 class Player:
@@ -47,16 +46,10 @@ class Player:
         self.algo = algo
         self.color = color
 
-        # Automatically set col based on player order
-        if len(Player.players) % 2 != 0:
-            col = 5
-        else:
-            col = 0
-
         self.stacks = [
-            [GobbletNode(1, color, symbol, row=0, col=col), GobbletNode(2, color, symbol,row=0, col=col), GobbletNode(3, color, symbol,row=0, col=col), GobbletNode(4, color, symbol,row=0, col=col, is_EXT=True)],
-            [GobbletNode(1, color, symbol, row=1, col=col), GobbletNode(2, color, symbol,row=1, col=col), GobbletNode(3, color, symbol, row=1, col=col), GobbletNode(4, color,  symbol,row=1, col=col, is_EXT=True)],
-            [GobbletNode(1, color, symbol, row=2, col=col), GobbletNode(2, color, symbol, row=2, col=col), GobbletNode(3, color, symbol, row=2, col= col), GobbletNode(4, color,  symbol, row=2, col=col,is_EXT=True)]
+            [GobbletNode(1, color, symbol), GobbletNode(2, color, symbol), GobbletNode(3, color, symbol), GobbletNode(4, color, symbol, is_EXT=True)],
+            [GobbletNode(1, color, symbol ), GobbletNode(2, color, symbol), GobbletNode(3, color, symbol), GobbletNode(4, color,  symbol, is_EXT=True)],
+            [GobbletNode(1, color, symbol), GobbletNode(2, color, symbol), GobbletNode(3, color, symbol), GobbletNode(4, color,  symbol,is_EXT=True)]
         ]
 
         # Add the player to the players list
