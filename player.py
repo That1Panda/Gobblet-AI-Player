@@ -201,7 +201,7 @@ class Player:
         
         """
         AI = AIAlgorithms
-        best_move = AIAlgorithms.get_best_move(AI,board,self.player_type == 'computer1' , self.symbol, 1, 15)
+        best_move = AIAlgorithms.get_best_move(AI,board,self.player_type == 'computer1' , self.symbol, 2, 15)
         print(best_move.curRow, best_move.curCol,best_move.newRow,best_move.newCol)
         #row, col = best_move
         if best_move.curRow in range(0,3) and ((best_move.curCol == 5) or (best_move.curCol== 0)):
