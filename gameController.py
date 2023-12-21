@@ -1,3 +1,4 @@
+from typing import Tuple
 import pygame
 import sys
 import random
@@ -69,15 +70,13 @@ class GameController:
             while move == False : 
                 move = self.current_player.make_move(self.board)
                 
-            running = self.game_status()
+            running, game_message = self.game_status()
             self.switch_player()
-
             pygame.display.flip()
+        
+        return game_message
 
-        pygame.quit()
-        sys.exit()
-
-    def game_status(self) -> bool:
+    def game_status(self) -> Tuple[bool, str]:
         """
         Checks the game status and returns True if the game is still running, False otherwise.
 
@@ -86,28 +85,9 @@ class GameController:
         """
         if self.board.check_win(self.current_player.symbol):
             print(f"Player {self.current_player.symbol} wins!")
-            return False
+            return False, f"{self.current_player.player_name} Player wins!"
         elif self.board.check_draw():
             print("It's a draw!")
-            return False
-        return True
+            return False, "It's a draw!"
+        return True, None
 
-
-# Example Usage:
-#parser = argparse.ArgumentParser(description='Play a game with two players.')
-
-# parser.add_argument('--player1' ,default='human', type=str,  help='Type of player 1 (human/computer)')
-#parser.add_argument('--player1_type', '-p1', default='human', type=str, help='Type of player 1 (human/computer)')
-#parser.add_argument('--algo1', '-a1',default='random', type=str, help='Algorithm for player 1 (if computer)')
-
-#parser.add_argument('--player2_type', '-p2',default='computer', type=str,  help='Type of player 2 (human/computer)')
-#parser.add_argument('--algo2', '-a2',default='random', type=str,  help='Algorithm for player 2 (if computer)')
-
-#args = parser.parse_args()
-
-player1 = Player(player_type='human', symbol='X',color='W', algo='alpha_beta_pruning')
-player2 = Player(player_type='computer2', symbol='Y',color='B', algo='alpha_beta_pruning')
-
-
-game_controller = GameController(player1, player2)
-game_controller.play_game()

@@ -1,6 +1,7 @@
 import pygame
 import random
 import time
+from constants import ComputerLevels
 from gameBoard import GameBoard
 from Alpha_Beta_Final import AIAlgorithms
 
@@ -32,7 +33,7 @@ class Player:
     """
     players = []  # Class variable to keep track of all players
 
-    def __init__(self, player_type: str, symbol: str, color: str, algo: str = None):
+    def __init__(self, player_name: str, player_type: str, symbol: str, color: str, algo: str = None, difficulty: int = ComputerLevels.NORMAL):
         """
         Initializes the Player with the specified player type, symbol, and algorithm.
 
@@ -40,11 +41,14 @@ class Player:
             player_type (str): the type of player ('human' or 'computer')
             symbol (str): the symbol representing the player ('X' or 'O')
             algo (str): the algorithm used for the computer player ('random', 'minimax', or 'alpha_beta_pruning')
+            difficulty (int): the difficulty of the player
         """
         self.player_type = player_type
         self.symbol = symbol
         self.algo = algo
         self.color = color
+        self.difficulty = difficulty
+        self.player_name = player_name
 
         self.stacks = [
             [GobbletNode(1, color, symbol), GobbletNode(2, color, symbol), GobbletNode(3, color, symbol), GobbletNode(4, color, symbol, is_EXT=True)],
@@ -201,7 +205,7 @@ class Player:
         
         """
         AI = AIAlgorithms
-        best_move = AIAlgorithms.get_best_move(AI,board,self.player_type == 'computer1' , self.symbol, 2, 15)
+        best_move = AIAlgorithms.get_best_move(AI,board,self.player_type == 'computer1' , self.symbol, self.difficulty, 15)
         print(best_move.curRow, best_move.curCol,best_move.newRow,best_move.newCol)
         #row, col = best_move
         if best_move.curRow in range(0,3) and ((best_move.curCol == 5) or (best_move.curCol== 0)):

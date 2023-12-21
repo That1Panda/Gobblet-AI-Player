@@ -66,14 +66,14 @@ class GameBoard:
         for i in range(3):
             for j in range (player1.stacks[i].__len__()):
                 if(player1.stacks[i][j].is_EXT == True):
-                    pygame.draw.circle(self.screen, (255, 10, 15) if player1.color == 'W' else (0, 0, 255),
+                    pygame.draw.circle(self.screen, (255, 0, 0),
                     center=(self.SQUARE_SIZE // 2,i * self.SQUARE_SIZE + self.SQUARE_SIZE // 2),
                     radius= player1.stacks[i][j].size * 6)
         # Draw the player2 stacks in the last column
         for i in range(3):
             for j in range (player2.stacks[i].__len__()):
                 if(player2.stacks[i][j].is_EXT == True):
-                    pygame.draw.circle(self.screen, (100, 54, 0) if player2.color == 'B' else (0, 0, 255),
+                    pygame.draw.circle(self.screen, (0, 0, 255),
                     center= (5 * self.SQUARE_SIZE + self.SQUARE_SIZE // 2,i * self.SQUARE_SIZE + self.SQUARE_SIZE // 2),
                     radius= player2.stacks[i][j].size * 6)
 
@@ -88,7 +88,7 @@ class GameBoard:
                 if len(self.board[row][col]) != 0:
                     piece = self.board[row][col]
                     if isinstance(self.board[row][col], list):
-                        pygame.draw.circle(self.screen, (255, 10, 15)  if piece[-1].color == 'W' else (100, 54, 0),
+                        pygame.draw.circle(self.screen, (255, 10, 15)  if piece[-1].color == 'W' else (0, 0, 255),
                                         (col * self.SQUARE_SIZE + self.SQUARE_SIZE // 2,
                                             row * self.SQUARE_SIZE + self.SQUARE_SIZE // 2),
                                             radius= piece[-1].size * 6)
