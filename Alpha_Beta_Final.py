@@ -1,7 +1,8 @@
+import sys
 import time
 from gameBoard import GameBoard
 import copy
-
+import pygame
 
 class move:
     """class of objects that contain the information about move to be done
@@ -345,6 +346,10 @@ class AIAlgorithms:
             moves = AIAlgorithms.get_nextMoves(self, board,current_player)
             
             for move in moves:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
                 # if move.curCol == 0 and len(board.board[2][3]) > 0 and board.board[2][3][-1].symbol == 'X':
                     # if move.newCol == 4 and move.newRow == 3:
                     # # if move.curCol == 0 and len(board.board[2][3]) > 0 and board.board[2][3][-1].symbol == 'X':                    

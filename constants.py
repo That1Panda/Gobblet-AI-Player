@@ -23,3 +23,11 @@ class SelectedPlayer(Enum):
     NORMAL_COMPUTER = 2
     HARD_COMPUTER = 3
     UNSELECTED = -1
+
+class GUIStyles(Enum):
+    """Class contains the GUI styles constants
+    """
+    BACKGROUND_COLOR = (40, 40, 40)
+    OPACITY = 179
+    UNSELECTED_BUTTON_BACKGROUND_COLOR = (255, 255, 255)
+    SELECTED_BUTTON_BACKGROUND_COLOR = (140, 140, 140)

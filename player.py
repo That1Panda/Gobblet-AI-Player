@@ -1,3 +1,5 @@
+import sys
+from typing import Tuple
 import pygame
 import random
 import time
@@ -33,7 +35,7 @@ class Player:
     """
     players = []  # Class variable to keep track of all players
 
-    def __init__(self, player_name: str, player_type: str, symbol: str, color: str, algo: str = None, difficulty: int = ComputerLevels.NORMAL):
+    def __init__(self, player_name: str, player_type: str, symbol: str, color: str, color_rgb: Tuple[int, int, int], algo: str = None, difficulty: int = ComputerLevels.NORMAL):
         """
         Initializes the Player with the specified player type, symbol, and algorithm.
 
@@ -49,6 +51,7 @@ class Player:
         self.color = color
         self.difficulty = difficulty
         self.player_name = player_name
+        self.color_rgb = color_rgb
 
         self.stacks = [
             [GobbletNode(1, color, symbol), GobbletNode(2, color, symbol), GobbletNode(3, color, symbol), GobbletNode(4, color, symbol, is_EXT=True)],
@@ -140,6 +143,9 @@ class Player:
         selected = False
         while not selected:
             for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()     
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouseX, mouseY = pygame.mouse.get_pos()
                     clicked_row, clicked_col = mouseY // board.SQUARE_SIZE, mouseX // board.SQUARE_SIZE
@@ -148,6 +154,9 @@ class Player:
                         print("please select a suitable node")
                         continue
                     elif clicked_row in range (0,4) and clicked_col in range (0,6):
+                        if (clicked_row == 3 and clicked_col == 0) or (clicked_row == 3 and clicked_col == 5):
+                            continue
+
                         if board.board[clicked_row][clicked_col][-1].symbol == self.symbol :
                             selected = True
                         else :

@@ -4,6 +4,8 @@ import random
 import time
 import sys
 
+from constants import GUIStyles
+
 class GameBoard:
     """
     A class representing the game board.
@@ -49,7 +51,7 @@ class GameBoard:
         self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption("Gobblet Game")
         self.WHITE = (255, 255, 255)
-        self.BLACK = (0, 0, 0)
+        self.screen.fill(GUIStyles.BACKGROUND_COLOR.value)
 
     def draw_board(self, player1, player2):
         """
@@ -59,7 +61,7 @@ class GameBoard:
             color1 (str): Color for player 1 ('W' or 'B')
             color2 (str): Color for player 2 ('W' or 'B')
         """
-        self.screen.fill(self.WHITE)
+        self.screen.fill(GUIStyles.BACKGROUND_COLOR.value)
 
 
         # Draw the player1 stacks in the first column
@@ -80,7 +82,7 @@ class GameBoard:
         # Draw the main game board
         for row in range(self.GRID_SIZE - 2):
             for col in range(1, self.GRID_SIZE - 1):  # Exclude the first and last columns
-                pygame.draw.rect(self.screen, self.BLACK,
+                pygame.draw.rect(self.screen, GUIStyles.BACKGROUND_COLOR.value,
                                  (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE), 0)
                 pygame.draw.rect(self.screen, self.WHITE,
                                  (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE), 1)
@@ -93,7 +95,6 @@ class GameBoard:
                                             row * self.SQUARE_SIZE + self.SQUARE_SIZE // 2),
                                             radius= piece[-1].size * 6)
 
-        pygame.display.flip()
 
     def assign_initial_values(self, player1, player2):
         """
