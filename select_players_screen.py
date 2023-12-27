@@ -98,8 +98,8 @@ class SelectPlayersScreen:
                         if first_player_type != SelectedPlayer.UNSELECTED.value and second_player_type != SelectedPlayer.UNSELECTED.value:
                             self.create_gambet_game(first_player_type, second_player_type)
                             screen = pygame.display.set_mode((730, 350))
-                            first_player_type = SelectedPlayer.UNSELECTED
-                            second_player_type = SelectedPlayer.UNSELECTED
+                            first_player_type = SelectedPlayer.UNSELECTED.value
+                            second_player_type = SelectedPlayer.UNSELECTED.value
 
             # Integrates `Gambit game` title to the screen
             pygame.draw.rect(screen, GUIStyles.BACKGROUND_COLOR.value, gambit_game_title_component)
