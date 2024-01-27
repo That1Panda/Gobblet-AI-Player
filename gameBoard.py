@@ -1,7 +1,10 @@
 import pygame
+
 import random
 import time
 import sys
+
+from constants import GUIStyles
 
 class GameBoard:
     """
@@ -48,49 +51,93 @@ class GameBoard:
         self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption("Gobblet Game")
         self.WHITE = (255, 255, 255)
-        self.BLACK = (0, 0, 0)
+        self.screen.fill(GUIStyles.BACKGROUND_COLOR.value)
 
-    def draw_board(self):
+    def draw_board(self, player1, player2):
         """
         Draws the game board on the screen.
+
+        Args:
+            color1 (str): Color for player 1 ('W' or 'B')
+            color2 (str): Color for player 2 ('W' or 'B')
         """
-        self.screen.fill(self.WHITE)
-        for row in range(self.GRID_SIZE):
-            for col in range(self.GRID_SIZE):
-                pygame.draw.rect(self.screen, self.BLACK,
+        self.screen.fill(GUIStyles.BACKGROUND_COLOR.value)
+
+
+        # Draw the player1 stacks in the first column
+        for i in range(3):
+            for j in range (player1.stacks[i].__len__()):
+                if(player1.stacks[i][j].is_EXT == True):
+                    pygame.draw.circle(self.screen, (255, 0, 0),
+                    center=(self.SQUARE_SIZE // 2,i * self.SQUARE_SIZE + self.SQUARE_SIZE // 2),
+                    radius= player1.stacks[i][j].size * 6)
+        # Draw the player2 stacks in the last column
+        for i in range(3):
+            for j in range (player2.stacks[i].__len__()):
+                if(player2.stacks[i][j].is_EXT == True):
+                    pygame.draw.circle(self.screen, (0, 0, 255),
+                    center= (5 * self.SQUARE_SIZE + self.SQUARE_SIZE // 2,i * self.SQUARE_SIZE + self.SQUARE_SIZE // 2),
+                    radius= player2.stacks[i][j].size * 6)
+
+        # Draw the main game board
+        for row in range(self.GRID_SIZE - 2):
+            for col in range(1, self.GRID_SIZE - 1):  # Exclude the first and last columns
+                pygame.draw.rect(self.screen, GUIStyles.BACKGROUND_COLOR.value,
                                  (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE), 0)
                 pygame.draw.rect(self.screen, self.WHITE,
                                  (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE), 1)
 
-                if self.board[row][col] != ' ':
+                if len(self.board[row][col]) != 0:
                     piece = self.board[row][col]
-                    pygame.draw.circle(self.screen, (255, 0, 0) if piece == 'X' else (0, 0, 255),
-                                       (col * self.SQUARE_SIZE + self.SQUARE_SIZE // 2,
-                                        row * self.SQUARE_SIZE + self.SQUARE_SIZE // 2),
-                                       self.SQUARE_SIZE // 3)
+                    if isinstance(self.board[row][col], list):
+                        pygame.draw.circle(self.screen, (255, 10, 15)  if piece[-1].color == 'W' else (0, 0, 255),
+                                        (col * self.SQUARE_SIZE + self.SQUARE_SIZE // 2,
+                                            row * self.SQUARE_SIZE + self.SQUARE_SIZE // 2),
+                                            radius= piece[-1].size * 6)
 
-        pygame.display.flip()
+
+    def assign_initial_values(self, player1, player2):
+        """
+        Assigns initial values to the grids in the first and last columns.
+
+        Args:
+            player1 (Player): Player 1 object
+            player2 (Player): Player 2 object
+        """
+        # Assign initial values in the first column and last columns
+        for i in range(3):
+            self.board[i][0] = player1.stacks[i]
+            self.board[i][5] = player2.stacks[i]
+
+        for i in range (0,4):
+            for j in range(1,5):
+                self.board[i][j] = []
+
+
 
     def check_win(self, player: str) -> bool:
         """
         Checks if the specified player has won the game.
 
         Args:
-            player (str): a string representing the player ('X' or 'O')
+        player (str): a string representing the player ('X' or 'O')
 
         Returns:
-            win (bool): True if the player has won, False otherwise.
+        win (bool): True if the player has won, False otherwise.
         """
-        for row in range(self.GRID_SIZE):
-            if all(self.board[row][col] == player for col in range(self.GRID_SIZE)):
+        for row in range(self.GRID_SIZE - 2):
+            # Check if all elements in the row have the same symbol
+            if all(self.board[row][col] and self.board[row][col][-1].symbol == player for col in range(1, self.GRID_SIZE - 1)):
+                return True
+            
+        # Column check
+        for col in range(1, self.GRID_SIZE - 1):
+            if all(self.board[row][col] and self.board[row][col][-1].symbol == player for row in range(self.GRID_SIZE - 2)):
                 return True
 
-        for col in range(self.GRID_SIZE):
-            if all(self.board[row][col] == player for row in range(self.GRID_SIZE)):
-                return True
-
-        if all(self.board[i][i] == player for i in range(self.GRID_SIZE)) or all(
-                self.board[i][self.GRID_SIZE - i - 1] == player for i in range(self.GRID_SIZE)):
+        # Diagonal checks
+        if all(self.board[row][row+1] and self.board[row][row+1][-1].symbol == player for row in range(0, 4)) or all(
+                self.board[row][4 - row] and self.board[row][4 - row][-1].symbol == player for row in range(0, 4)):
             return True
 
         return False
@@ -104,7 +151,7 @@ class GameBoard:
         """
         if self.check_win('X'):
             return 1
-        elif self.check_win('O'):
+        elif self.check_win('Y'):
             return -1
         elif self.check_draw():
             return 0
@@ -118,12 +165,12 @@ class GameBoard:
         Returns:
             draw (bool): True if the game is a draw, False otherwise.
         """
-        return all(self.board[row][col] != ' ' for row in range(self.GRID_SIZE) for col in range(self.GRID_SIZE))
+        return all( len(self.board[row][col]) != 0 for row in range(self.GRID_SIZE-2) for col in range(1,self.GRID_SIZE-1))
 
 
 # Example Usage:
-# game_board = GameBoard(grid_size=4)
-# game_board.draw_board()
+#game_board = GameBoard(grid_size=4)
+
 # time.sleep(5)
 # pygame.quit()
 # sys.exit()
